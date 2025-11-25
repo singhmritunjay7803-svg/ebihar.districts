@@ -209,8 +209,7 @@ ministers.forEach(minister => {
         const name = minister.getAttribute("data-name") || "";
         const ministry = minister.getAttribute("data-ministry") || "";
 
-        // Split English and Hindi if using "/" as separator
-        const [nameEn, nameHi] = fullName.split(" / ").map(s => s.trim());
+        const [nameEn, nameHi] = name.split(" / ").map(s => s.trim());
         const [minEn, minHi] = (ministry ? ministry.split(" / ") : ["", ""]).map(s => s.trim());
 
         centerBox.innerHTML = `
