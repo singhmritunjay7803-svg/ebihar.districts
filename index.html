@@ -23,7 +23,6 @@
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#222}
 
-    /* top banner */
     .top-banner{
       background: linear-gradient(90deg, rgba(75,0,130,0.95), rgba(75,0,150,0.85));
       padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;left:0;right:0;top:0;z-index:1200;color:#fff
@@ -31,17 +30,14 @@
     .top-banner img{height:48px;width:auto}
     .page-wrap{padding-top:86px}
 
-    /* banner hero */
     .banner{min-height:var(--banner-height);display:flex;align-items:center;justify-content:center;background:#6e54a3;background-image:none;color:#fff;font-size:clamp(24px,4vw,42px);font-weight:700;text-align:center}
 
-    /* Chief minister card */
     .chief-minister{max-width:1100px;margin:28px auto;padding:0 12px}
     .chief-minister-card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);padding:40px 24px;position:relative;text-align:center}
     .chief-minister-photo{width:160px;height:160px;object-fit:cover;border-radius:50%;display:block;margin:-120px auto 6px;border:6px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,0.12)}
     .chief-minister-card h3{margin:6px 0;font-size:18px;color:var(--primary-color)}
     .chief-minister-card span{display:block;color:#444;margin-bottom:6px}
 
-    /* deputy cards layout */
     .children{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;justify-content:center;margin-top:18px}
     .deputy{background:#fff;border-radius:10px;padding:14px 16px;width:320px;box-shadow:0 4px 10px rgba(0,0,0,0.06);position:relative}
     .deputy .main{width:120px;height:120px;border-radius:50%;object-fit:cover;display:block;margin:6px auto}
@@ -49,13 +45,11 @@
     .corner.left{left:12px}
     .corner.right{right:12px}
 
-    /* circle ministers */
     .cabinet-of-ministers-circle-container{width:min(92vw,900px);height:min(92vw,900px);margin:36px auto 8px;position:relative}
     .cabinet-of-ministers-center{position:absolute;inset:0;margin:auto;width:var(--center-size);height:var(--center-size);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;color:var(--primary-color);box-shadow:0 10px 30px rgba(0,0,0,0.12);border:6px solid rgba(0,0,0,0.08);z-index:40}
 
     .cabinet-of-ministers-circle{width:100%;height:100%;position:relative;transform-origin:center center;animation:rotateCircle 40s linear infinite}
 
-    /* each minister image uses --i custom property (1..N) */
     .cabinet-of-ministers-circle img{
       --s: var(--minister-size);
       position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;object-fit:cover;border:4px solid var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.12),0 0 18px rgba(255,215,0,0.08);transform-origin: center calc(-1 * var(--radius));
@@ -66,16 +60,14 @@
       z-index:30;
     }
 
-    /* hover enlarge and bring forward */
     .cabinet-of-ministers-circle img:hover{transform: rotate(calc(360deg / var(--count) * var(--i))) translate(var(--radius)) rotate(calc(-360deg / var(--count) * var(--i))) scale(1.25);z-index:999;box-shadow:0 18px 40px rgba(0,0,0,0.25),0 0 36px rgba(255,215,0,0.12)}
 
     @keyframes rotateCircle{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
-    /* districts grid */
-    .districts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;max-width:1100px;margin:30px auto;padding:0 12px}
-    .districts-card{background:#fff;border-radius:10px;overflow:hidden;display:block;text-decoration:none;color:inherit;box-shadow:0 6px 20px rgba(0,0,0,0.06);transition:transform .18s}
+    .districts{display:grid;grid-template-columns:repeat(3, 1fr);gap:20px;padding: 20px}
+    .districts-card{background:#fff;border-radius:10px;overflow:hidden;display:block;text-decoration:none;color:inherit;box-shadow:0 4px 8px rgba(0,0,0,0.1);transition:transform .18s}
     .districts-card img{width:100%;height:160px;object-fit:cover;display:block}
-    .districts-card .info{padding:12px;text-align:center}
+    .districts-card .info{padding:20px;text-align:center}
     .districts-card:hover{transform:translateY(-6px)}
 
     footer{background:#fff;padding:18px 12px;border-top:1px solid #eee;margin-top:28px;text-align:center}
@@ -147,8 +139,6 @@
       <div class="cabinet-of-ministers-circle-container" id="minister-circle-wrap">
         <div class="cabinet-of-ministers-center" aria-hidden="true">BIHAR<br>COUNCIL OF MINISTERS</div>
         <div class="cabinet-of-ministers-circle" id="minister-circle">
-          <!-- Example images, keep the --i index starting at 0 (JS will use data-i) or 1 depending on calculation -->
-          <!-- Make sure the files exist or replace with correct URLs. The script will count them automatically. -->
           <img data-i="0" src="cabinet_of_ministers_of_bihar_minister_1.jpg" alt="Minister 1" />
           <img data-i="1" src="cabinet_of_ministers_of_bihar_minister_2.jpg" alt="Minister 2" />
           <img data-i="2" src="cabinet_of_ministers_of_bihar_minister_3.jpg" alt="Minister 3" />
