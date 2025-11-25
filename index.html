@@ -6,18 +6,18 @@
   <title>Districts of Bihar — Fixed</title>
   <meta name="description" content="Districts of Bihar — cleaned & responsive version" />
   <style>
-    /* ====== Reset & base ====== */
+
     :root{
       --banner-height: 80vh;
       --primary-color: #4B0082;
       --accent: gold;
       --bg: #f9f9f9;
-      --center-size: 260px; /* default center circle size */
-      --minister-size: 90px; /* default minister image size */
+      --center-size: 260px;
+      --minister-size: 90px;
       --transition: 0.28s ease;
-      --min-radius-offset: 90px; /* spacing from center */
-      --count: 12; /* fallback count, will be updated by JS */
-      --radius: 300px; /* fallback radius, updated by JS */
+      --min-radius-offset: 90px;
+      --count: 12;
+      --radius: 300px;
     }
 
     *{box-sizing:border-box}
@@ -32,27 +32,34 @@
 
     .banner{min-height:var(--banner-height);display:flex;align-items:center;justify-content:center;background:#6e54a3;background-image:none;color:#fff;font-size:clamp(24px,4vw,42px);font-weight:700;text-align:center}
 
-    .chief-minister{max-width:1100px;margin:28px auto;padding:0 12px}
-    .chief-minister-card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);padding:40px 24px;position:relative;text-align:center}
-    .chief-minister-photo{width:160px;height:160px;object-fit:cover;border-radius:50%;display:block;margin:-120px auto 6px;border:6px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,0.12)}
-    .chief-minister-card h3{margin:6px 0;font-size:18px;color:var(--primary-color)}
-    .chief-minister-card span{display:block;color:#444;margin-bottom:6px}
+    .chief-minister-of-bihar{max-width:1100px;margin:28px auto;padding:0 12px}
+
+    .chief-minister-of-bihar-card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);padding:40px 24px;position:relative;text-align:center}
+
+    .chief-minister-of-bihar-photo{width:160px;height:160px;object-fit:cover;border-radius:50%;display:block;margin:-120px auto 6px;border:6px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,0.12)}
+
+    .chief-minister-of-bihar-card h3{margin:6px 0;font-size:18px;color:var(--primary-color)}
+
+    .chief-ministerof-bihar-card span{display:block;color:#444;margin-bottom:6px}
 
     .children{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;justify-content:center;margin-top:18px}
+
     .deputy{background:#fff;border-radius:10px;padding:14px 16px;width:320px;box-shadow:0 4px 10px rgba(0,0,0,0.06);position:relative}
+
     .deputy .main{width:120px;height:120px;border-radius:50%;object-fit:cover;display:block;margin:6px auto}
+
     .corner{width:48px;height:48px;border-radius:50%;object-fit:cover;position:absolute;top:12px}
     .corner.left{left:12px}
     .corner.right{right:12px}
 
-    .cabinet-of-ministers-circle-container{width:min(92vw,900px);height:min(92vw,900px);margin:36px auto 8px;position:relative}
-    .cabinet-of-ministers-center{position:absolute;inset:0;margin:auto;width:var(--center-size);height:var(--center-size);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;color:var(--primary-color);box-shadow:0 10px 30px rgba(0,0,0,0.12);border:6px solid rgba(0,0,0,0.08);z-index:40}
+    .cabinet-or-council-of-ministers-of-bihar-circle-container{width:min(92vw,900px);height:min(92vw,900px);margin:36px auto 8px;position:relative}
 
-    .cabinet-of-ministers-circle{width:100%;height:100%;position:relative;transform-origin:center center;animation:rotateCircle 40s linear infinite}
+    .cabinet-or-council-of-ministers-of-bihar-center{position:absolute;inset:0;margin:auto;width:var(--center-size);height:var(--center-size);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;color:var(--primary-color);box-shadow:0 10px 30px rgba(0,0,0,0.12);border:6px solid rgba(0,0,0,0.08);z-index:40}
 
-    .cabinet-of-ministers-circle img{
-      --s: var(--minister-size);
-      position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;object-fit:cover;border:4px solid var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.12),0 0 18px rgba(255,215,0,0.08);transform-origin: center calc(-1 * var(--radius));
+    .cabinet-or-council-of-ministers-of-bihar-circle{width:100%;height:100%;position:relative;transform-origin:center center;animation:rotateCircle 40s linear infinite}
+
+    .cabinet-or-council-of-ministers-of-bihar-circle img{
+      --s: var(--minister-size);position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;object-fit:cover;border:4px solid var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.12),0 0 18px rgba(255,215,0,0.08);transform-origin: center calc(-1 * var(--radius));
       /* base transform: rotate(index) translate(radius) counter-rotate so image stays upright */
       transform: rotate(calc(360deg / var(--count) * var(--i))) translate(var(--radius)) rotate(calc(-360deg / var(--count) * var(--i))) scale(1);
       transition: transform var(--transition), box-shadow var(--transition), z-index 0s;
@@ -60,14 +67,18 @@
       z-index:30;
     }
 
-    .cabinet-of-ministers-circle img:hover{transform: rotate(calc(360deg / var(--count) * var(--i))) translate(var(--radius)) rotate(calc(-360deg / var(--count) * var(--i))) scale(1.25);z-index:999;box-shadow:0 18px 40px rgba(0,0,0,0.25),0 0 36px rgba(255,215,0,0.12)}
+    .cabinet-or-council-of-ministers-of-bihar-circle img:hover{transform: rotate(calc(360deg / var(--count) * var(--i))) translate(var(--radius)) rotate(calc(-360deg / var(--count) * var(--i))) scale(1.25);z-index:999;box-shadow:0 18px 40px rgba(0,0,0,0.25),0 0 36px rgba(255,215,0,0.12)}
 
     @keyframes rotateCircle{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
     .districts{display:grid;grid-template-columns:repeat(3, 1fr);gap:20px;padding: 20px}
+
     .districts-card{background:#fff;border-radius:10px;overflow:hidden;display:block;text-decoration:none;color:inherit;box-shadow:0 4px 8px rgba(0,0,0,0.1);transition:transform .18s}
+
     .districts-card img{width:100%;height:160px;object-fit:cover;display:block}
+
     .districts-card .info{padding:20px;text-align:center}
+
     .districts-card:hover{transform:translateY(-6px)}
 
     footer{background:#fff;padding:18px 12px;border-top:1px solid #eee;margin-top:28px;text-align:center}
@@ -77,9 +88,9 @@
     /* responsive tweaks */
     @media (max-width:720px){
       :root{--minister-size:64px;--center-size:170px}
-      .chief-minister-photo{width:120px;height:120px;margin-top:-80px}
+      .chief-minister-of-bihar-photo{width:120px;height:120px;margin-top:-80px}
       .deputy{width:100%}
-      .cabinet-of-ministers-circle{animation-duration:55s}
+      .cabinet-or-council-of-ministers-of-bihar-circle{animation-duration:55s}
     }
 
     @media (max-width:420px){
@@ -107,8 +118,8 @@
     </header>
 
     <section class="chief-minister" aria-labelledby="cm-heading">
-      <div class="chief-minister-card" role="group" aria-labelledby="cm-heading">
-        <img class="chief-minister-photo" src="chief_minister_of_bihar.jpg" alt="Chief Minister Nitish Kumar" />
+      <div class="chief-minister-of-bihar-card" role="group" aria-labelledby="cm-heading">
+        <img class="chief-minister-of-bihar-photo" src="chief_minister_of_bihar.jpg" alt="Chief Minister Of Bihar" />
         <div class="info">
           <h3 id="cm-heading">Hon'ble 22nd Chief Minister of Bihar — Nitish Kumar (नीतीश कुमार)</h3>
           <span>In office: 22 February 2015 — Present</span>
@@ -134,11 +145,10 @@
       </div>
     </section>
 
-    <!-- Cabinet circle -->
-    <section aria-label="Bihar Council of Ministers" style="max-width:1200px;margin:20px auto;padding:0 12px">
-      <div class="cabinet-of-ministers-circle-container" id="minister-circle-wrap">
-        <div class="cabinet-of-ministers-center" aria-hidden="true">BIHAR<br>COUNCIL OF MINISTERS</div>
-        <div class="cabinet-of-ministers-circle" id="minister-circle">
+    <section aria-label="Bihar Cabinet or Council of Ministers" style="max-width:1200px;margin:20px auto;padding:0 12px">
+      <div class="cabinet-or-council-of-ministers-of-bihar-circle-container" id="minister-circle-wrap">
+        <div class="cabinet-or-council-of-ministers-of-bihar-center" aria-hidden="true">BIHAR<br>CABINET OR COUNCIL OF MINISTERS</div>
+        <div class="cabinet-or-council-of-ministers-of-bihar-circle" id="minister-circle">
           <img data-i="0" src="cabinet_of_ministers_of_bihar_minister_1.jpg" alt="Minister 1" />
           <img data-i="1" src="cabinet_of_ministers_of_bihar_minister_2.jpg" alt="Minister 2" />
           <img data-i="2" src="cabinet_of_ministers_of_bihar_minister_3.jpg" alt="Minister 3" />
@@ -367,8 +377,8 @@
 
     <footer>
       <div class="footer-photos">
-        <img src="footer_bihar_emblem.png" alt="Bihar emblem" />
-        <img src="footer_bihar.png" alt="Bihar" />
+        <img src="footer_bihar_emblem.png" alt="Footer Bihar Emblem" />
+        <img src="footer_bihar.png" alt="Footer Bihar" />
       </div>
       <small>© 2025 Bihar State</small>
     </footer>
