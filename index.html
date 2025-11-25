@@ -200,6 +200,28 @@ data-name="Ashok Choudhary / अशोक चौधरी"
       </div>
     </section>
 
+<script>
+const centerBox = document.getElementById("center-info");
+const ministers = document.querySelectorAll("#minister-circle img");
+
+ministers.forEach(minister => {
+    minister.addEventListener("click", () => {
+        const name = minister.getAttribute("data-name");
+        const ministry = minister.getAttribute("data-ministry");
+
+        centerBox.innerHTML = `
+          <div style='font-size:17px; font-weight:bold;'>${name}</div>
+          <div style='font-size:15px;'>${nameHi}</div>
+          <div style='margin-top:8px; font-size:14px; font-weight:bold;'>${minEn}</div>
+          <div style='font-size:13px;'>${minHi}</div>
+        `;
+
+        centerBox.style.background = "#fff3d4";
+        setTimeout(() => centerBox.style.background = "white", 300);
+    });
+});
+</script>
+
     <h2 style="text-align:center;color:var(--primary-color);margin-top:18px">DISTRICTS OF BIHAR</h2>
 
     <section class="districts" aria-label="District cards">
