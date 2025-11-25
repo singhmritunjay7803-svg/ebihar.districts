@@ -201,19 +201,23 @@ data-name="Ashok Choudhary / अशोक चौधरी"
     </section>
 
 <script>
-const centerBox = document.getElementById("center-info");
+const centerBox = document.querySelector(".cabinet-or-council-of-ministers-of-bihar-center"); // use existing center box
 const ministers = document.querySelectorAll("#minister-circle img");
 
 ministers.forEach(minister => {
     minister.addEventListener("click", () => {
-        const name = minister.getAttribute("data-name");
-        const ministry = minister.getAttribute("data-ministry");
+        const name = minister.getAttribute("data-name") || "";
+        const ministry = minister.getAttribute("data-ministry") || "";
+
+        // Split English and Hindi if using "/" as separator
+        const [nameEn, nameHi] = fullName.split(" / ").map(s => s.trim());
+        const [minEn, minHi] = (ministry ? ministry.split(" / ") : ["", ""]).map(s => s.trim());
 
         centerBox.innerHTML = `
-          <div style='font-size:17px; font-weight:bold;'>${name}</div>
-          <div style='font-size:15px;'>${nameHi}</div>
+          <div style='font-size:16px; font-weight:bold;'>${nameEn}</div>
+          <div style='font-size:14px; color:#555;'>${nameHi || ''}</div>
           <div style='margin-top:8px; font-size:14px; font-weight:bold;'>${minEn}</div>
-          <div style='font-size:13px;'>${minHi}</div>
+          <div style='font-size:13px; color:#555;'>${minHi || ''}</div>
         `;
 
         centerBox.style.background = "#fff3d4";
