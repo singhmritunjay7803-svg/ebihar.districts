@@ -1,653 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Districts of Bihar</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Districts of Bihar — Fixed</title>
+  <meta name="description" content="Districts of Bihar — cleaned & responsive version" />
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-    }
-    
-    .cabinet-of-ministers-circle-container {
-      position: relative;
-      width: 900px;
-      height: 900px;
-      margin: 60px auto;
-}
-
-.cabinet-of-ministers-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  border-radius: 50%;
-  width: 260px;
-  height: 260px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  text-align: center;
-  box-shadow: 0 0 25px rgba(0,0,0,0.3);
-  border: 8px solid #333;
-}
-
-.cabinet-of-ministers-circle {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  animation: rotateCircle 35s linear infinite;
-}
-
-.cabinet-of-ministers-circle img {
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid gold;
-  box-shadow: 0 0 14px gold;
-  left: 50%;
-  top: 50%;
-  transform-origin: 300px;
-  transform: rotate(calc(360deg/22 * var(--i)))
-             translate(300px)
-             rotate(calc(-(360deg/22) * var(--i)));
-  transition: 0.3s, ease;
-}
-
-.cabinet-of-ministers-circle img:hover {
-  transform: rotate(calc(360deg/22 * var(--i)))
-             translate(300px)
-             rotate(calc(-(360deg/22) * var(--i)));
-             scale(1.25);
-  z-index: 999;
-}
-
-@media (max-width: 768px) {
-  .cabinet-of-ministers-circle-container {
-    width: 420px;
-    height: 420px;
-  }
-
-  .cabinet-of-ministers-center {
-    width: 150px;
-    height: 150px;
-    font-size: 16px;
-  }
-
-  .cabinet-of-ministers-circle img {
-    width: 60px;
-    height: 60px;
-    transform-origin: 180px;
-    transform: rotate(calc(360deg / 22 * var(--i)))
-               translate(180px)
-               rotate(calc(-(360deg / 22) * var(--i)));
-  }
-}
-
-@media (max-width: 480px) {
-  .cabinet-of-ministers-circle-container {
-    width: 340px;
-    height: 340px;
-  }
-
-  .cabinet-of-ministers-center {
-    width: 130px;
-    height: 130px;
-    font-size: 14px;
-  }
-
-  .cabinet-of-ministers-circle img {
-    width: 50px;
-    height: 50px;
-    transform-origin: 150px;
-    transform: rotate(calc(360deg / 22 * var(--i)))
-               translate(150px)
-               rotate(calc(-(360deg / 22) * var(--i)));
-  }
-}
-
-    .top-banner {
-      background-color: rgba(75, 0, 130, 0.8);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
+    /* ====== Reset & base ====== */
+    :root{
+      --banner-height: 80vh;
+      --primary-color: #4B0082;
+      --accent: gold;
+      --bg: #f9f9f9;
+      --center-size: 260px; /* default center circle size */
+      --minister-size: 90px; /* default minister image size */
+      --transition: 0.28s ease;
+      --min-radius-offset: 90px; /* spacing from center */
+      --count: 12; /* fallback count, will be updated by JS */
+      --radius: 300px; /* fallback radius, updated by JS */
     }
 
-    .top-banner img {
-      height: 60px;
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#222}
+
+    /* top banner */
+    .top-banner{
+      background: linear-gradient(90deg, rgba(75,0,130,0.95), rgba(75,0,150,0.85));
+      padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;left:0;right:0;top:0;z-index:1200;color:#fff
+    }
+    .top-banner img{height:48px;width:auto}
+    .page-wrap{padding-top:86px}
+
+    /* banner hero */
+    .banner{min-height:var(--banner-height);display:flex;align-items:center;justify-content:center;background:#6e54a3;background-image:none;color:#fff;font-size:clamp(24px,4vw,42px);font-weight:700;text-align:center}
+
+    /* Chief minister card */
+    .chief-minister{max-width:1100px;margin:28px auto;padding:0 12px}
+    .chief-minister-card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);padding:40px 24px;position:relative;text-align:center}
+    .chief-minister-photo{width:160px;height:160px;object-fit:cover;border-radius:50%;display:block;margin:-120px auto 6px;border:6px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,0.12)}
+    .chief-minister-card h3{margin:6px 0;font-size:18px;color:var(--primary-color)}
+    .chief-minister-card span{display:block;color:#444;margin-bottom:6px}
+
+    /* deputy cards layout */
+    .children{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;justify-content:center;margin-top:18px}
+    .deputy{background:#fff;border-radius:10px;padding:14px 16px;width:320px;box-shadow:0 4px 10px rgba(0,0,0,0.06);position:relative}
+    .deputy .main{width:120px;height:120px;border-radius:50%;object-fit:cover;display:block;margin:6px auto}
+    .corner{width:48px;height:48px;border-radius:50%;object-fit:cover;position:absolute;top:12px}
+    .corner.left{left:12px}
+    .corner.right{right:12px}
+
+    /* circle ministers */
+    .cabinet-of-ministers-circle-container{width:min(92vw,900px);height:min(92vw,900px);margin:36px auto 8px;position:relative}
+    .cabinet-of-ministers-center{position:absolute;inset:0;margin:auto;width:var(--center-size);height:var(--center-size);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;color:var(--primary-color);box-shadow:0 10px 30px rgba(0,0,0,0.12);border:6px solid rgba(0,0,0,0.08);z-index:40}
+
+    .cabinet-of-ministers-circle{width:100%;height:100%;position:relative;transform-origin:center center;animation:rotateCircle 40s linear infinite}
+
+    /* each minister image uses --i custom property (1..N) */
+    .cabinet-of-ministers-circle img{
+      --s: var(--minister-size);
+      position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;object-fit:cover;border:4px solid var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.12),0 0 18px rgba(255,215,0,0.08);transform-origin: center calc(-1 * var(--radius));
+      /* base transform: rotate(index) translate(radius) counter-rotate so image stays upright */
+      transform: rotate(calc(360deg / var(--count) * var(--i))) translate(var(--radius)) rotate(calc(-360deg / var(--count) * var(--i))) scale(1);
+      transition: transform var(--transition), box-shadow var(--transition), z-index 0s;
+      cursor:pointer;
+      z-index:30;
     }
 
-    .banner {
-      width: 100%;
-      min-height: 80vh;
-      background: url('slide-1.png') center/cover no-repeat;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 36px;
-      font-weight: bold;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+    /* hover enlarge and bring forward */
+    .cabinet-of-ministers-circle img:hover{transform: rotate(calc(360deg / var(--count) * var(--i))) translate(var(--radius)) rotate(calc(-360deg / var(--count) * var(--i))) scale(1.25);z-index:999;box-shadow:0 18px 40px rgba(0,0,0,0.25),0 0 36px rgba(255,215,0,0.12)}
+
+    @keyframes rotateCircle{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+    /* districts grid */
+    .districts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;max-width:1100px;margin:30px auto;padding:0 12px}
+    .districts-card{background:#fff;border-radius:10px;overflow:hidden;display:block;text-decoration:none;color:inherit;box-shadow:0 6px 20px rgba(0,0,0,0.06);transition:transform .18s}
+    .districts-card img{width:100%;height:160px;object-fit:cover;display:block}
+    .districts-card .info{padding:12px;text-align:center}
+    .districts-card:hover{transform:translateY(-6px)}
+
+    footer{background:#fff;padding:18px 12px;border-top:1px solid #eee;margin-top:28px;text-align:center}
+    .footer-photos{display:flex;justify-content:center;gap:8px;align-items:center}
+    .footer-photos img{height:44px;width:auto}
+
+    /* responsive tweaks */
+    @media (max-width:720px){
+      :root{--minister-size:64px;--center-size:170px}
+      .chief-minister-photo{width:120px;height:120px;margin-top:-80px}
+      .deputy{width:100%}
+      .cabinet-of-ministers-circle{animation-duration:55s}
     }
 
-    .banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-   }
-
-@media (min-width: 992px) {
-  .banner {
-    height: 90vh;
-    background-attachment: fixed;
-  }
-}
-
-    h2 {
-      text-align: center;
-      color: #4B0082;
-      margin: 30px 0 20px;
-      font-size: 26px;
+    @media (max-width:420px){
+      :root{--minister-size:52px;--center-size:150px}
+      .banner{font-size:20px}
+      .top-banner img{height:40px}
     }
-
-    .chief-minister {
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    .chief-minister-photo {
-      width: 160px;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 50%;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      margin-bottom: -60px;
-      position: relative;
-      z-index: 10;
-      background: #fff;
-    }
-
-    .chief-minister-card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      padding: 80px 20px 20px;
-      text-align: center;
-      width: 340px;
-      margin: 0 auto 30px;
-      position: relative;
-    }
-
-    .line-down {
-      width: 4px;
-      height: 60px;
-      background: black;
-      margin: 0 auto 12px auto;
-    }
-
-    .split {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: relative;
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto 16px auto;
-    }
-
-    .split .line {
-      width: 4px;
-      height: 40px;
-      margin: 0 50px;
-      background: black;
-    }
-
-    .children {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto 20px;
-      flex-wrap: wrap;
-    }
-
-    .districts {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    .districts-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
-      transition: transform 0.2s;
-      display: block;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .districts-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .districts-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .districts-card .info {
-      padding: 15px;
-      text-align: center;
-    }
-
-    .districts-card .info p {
-      margin: 5px 0;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .districts-card .info span {
-      font-size: 16px;
-      color: #555;
-    }
-
-footer {
-  margin-top: 40px;
-  background: #fff;
-  border-top: 1px solid #e5e5e5;
-  padding: 20px 10px;
-  text-align: center;
-  font-size: 14px;
-  color: #555;
-}
-
-.footer-photos {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.footer-photos img {
-  width: 50px;
-  height: auto;
-}
-
-.footer-links {
-  margin: 10px 0;
-}
-
-.footer-links a {
-  margin: 0 8px;
-  text-decoration: none;
-  color: #333;
-}
-
-.footer-links a:hover {
-  color: #4B0082;
-  text-decoration: underline;
-}
-
-.footer-bottom {
-  margin-top: 10px;
-}
-
-.footer-logo {
-  display: block;
-  margin: 0 auto 5px;
-  width: 22px;
-  height: 22px;
-}
-</style>
+  </style>
 </head>
 <body>
-
-  <!-- Top Banner -->
-  <div class="top-banner">
-    <img src="bihar_logo.png" alt="Bihar Logo">
-    <div>
-      <img src="swaas_logo.png" alt="Swaas Logo">
-      <img src="digital_india_logo.png" alt="Digital India Logo">
+  <div class="top-banner" role="banner">
+    <div style="display:flex;gap:12px;align-items:center">
+      <img src="bihar_logo.png" alt="Bihar Emblem" />
+      <strong style="font-size:18px">Districts of Bihar</strong>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <img src="swaas_logo.png" alt="Swaas Logo" />
+      <img src="digital_india_logo.png" alt="Digital India Logo" />
     </div>
   </div>
 
-  <!-- Image Banner -->
-  <div class="banner">
-    Districts of Bihar
-  </div>
+  <main class="page-wrap">
+    <header class="banner" role="img" aria-label="Districts of Bihar banner">
+      Districts of Bihar
+    </header>
 
-  <div class="chief-minister">
-    <img src="chief_minister_of_bihar.jpg" alt="Chief Minister Of Bihar" class="chief-minister-photo">
+    <section class="chief-minister" aria-labelledby="cm-heading">
+      <div class="chief-minister-card" role="group" aria-labelledby="cm-heading">
+        <img class="chief-minister-photo" src="chief_minister_of_bihar.jpg" alt="Chief Minister Nitish Kumar" />
+        <div class="info">
+          <h3 id="cm-heading">Hon'ble 22nd Chief Minister of Bihar — Nitish Kumar (नीतीश कुमार)</h3>
+          <span>In office: 22 February 2015 — Present</span>
+          <span>Born: 1 March 1951</span>
+          <span>Serving multiple terms</span>
+        </div>
+      </div>
 
-  <div class="chief-minister-card">
-    <img src="chief_minister_of_bihar_political_party.jpg" alt="Chief Minister Of BiharPolitical Party" class="corner left">
-    <img src="chief_minister_of_bihar_alliance_party.jpg" alt="Chief Minister Of Bihar Alliance Party" class="corner right">
+      <div class="children" aria-label="Deputy ministers">
+        <article class="deputy" aria-labelledby="dep1">
+          <img class="main" src="deputy_chief_minister_of_bihar_1.jpg" alt="Deputy Chief Minister Samrat Choudhary" />
+          <img class="corner left" src="deputy_chief_minister_of_bihar_1_political_party.jpg" alt="Political party" />
+          <img class="corner right" src="deputy_chief_minister_of_bihar_1_alliance_party.jpg" alt="Alliance party" />
+          <div class="info"><h4 id="dep1">Samrat Choudhary (Rakesh Kumar)</h4><span>Born: 16 November 1968</span></div>
+        </article>
 
-    <div class="info">
-      <h3>Hon'ble 22nd Chief Minister Of Bihar</h3>
-      <h3>बिहार के 22वे माननीय मुख्यमंत्री जी</h3>
-      <h3>Nitish Kumar</h3>
-      <h3>नीतीश कुमार</h3>
-      <h3>Incumbment</h3> <span>(Existence In Office)</span> <span>22 February 2015-Present-Day</span>
-<h3>पदधारी</h3><span>(कार्यालय में मौजूद)</span> <span>22 फ़रवरी 2015-वर्तमान</span>
-      <h3>Born (Life Spam)</h3> <span>
-1 March 1951-Present-Day (Age 74 years)</span>
-      <h3>जन्म (जीवन काल)</h3> <span>
-1 मार्च 1951-वर्तमान (आयु 74 वर्ष)</span>
-      <h3>Serving 10th Term (10 years)</h3>
-      <h3>सेवा 10वी अवधि (10 वर्ष)</h3>
-  </div>
-</div>
+        <article class="deputy" aria-labelledby="dep2">
+          <img class="main" src="deputy_chief_minister_of_bihar_2.jpg" alt="Deputy Chief Minister Vijay Kumar Sinha" />
+          <img class="corner left" src="deputy_chief_minister_of_bihar_2_political_party.jpg" alt="Political party" />
+          <img class="corner right" src="deputy_chief_minister_of_bihar_2_alliance_party.jpg" alt="Alliance party" />
+          <div class="info"><h4 id="dep2">Vijay Kumar Sinha</h4><span>Born: 5 June 1967</span></div>
+        </article>
+      </div>
+    </section>
 
-    <div class="line-down"></div>
+    <!-- Cabinet circle -->
+    <section aria-label="Bihar Council of Ministers" style="max-width:1200px;margin:20px auto;padding:0 12px">
+      <div class="cabinet-of-ministers-circle-container" id="minister-circle-wrap">
+        <div class="cabinet-of-ministers-center" aria-hidden="true">BIHAR<br>COUNCIL OF MINISTERS</div>
+        <div class="cabinet-of-ministers-circle" id="minister-circle">
+          <!-- Example images, keep the --i index starting at 0 (JS will use data-i) or 1 depending on calculation -->
+          <!-- Make sure the files exist or replace with correct URLs. The script will count them automatically. -->
+          <img data-i="0" src="cabinet_of_ministers_of_bihar_minister_1.jpg" alt="Minister 1" />
+          <img data-i="1" src="cabinet_of_ministers_of_bihar_minister_2.jpg" alt="Minister 2" />
+          <img data-i="2" src="cabinet_of_ministers_of_bihar_minister_3.jpg" alt="Minister 3" />
+          <img data-i="3" src="cabinet_of_ministers_of_bihar_minister_4.jpg" alt="Minister 4" />
+          <img data-i="4" src="cabinet_of_ministers_of_bihar_minister_5.jpg" alt="Minister 5" />
+          <img data-i="5" src="cabinet_of_ministers_of_bihar_minister_6.jpg" alt="Minister 6" />
+          <img data-i="6" src="cabinet_of_ministers_of_bihar_minister_7.jpg" alt="Minister 7" />
+          <img data-i="7" src="cabinet_of_ministers_of_bihar_minister_8.jpg" alt="Minister 8" />
+          <img data-i="8" src="cabinet_of_ministers_of_bihar_minister_9.jpg" alt="Minister 9" />
+          <img data-i="9" src="cabinet_of_ministers_of_bihar_minister_10.jpg" alt="Minister 10" />
+          <img data-i="10" src="cabinet_of_ministers_of_bihar_minister_11.jpg" alt="Minister 11" />
+          <img data-i="11" src="cabinet_of_ministers_of_bihar_minister_12.jpg" alt="Minister 12" />
+          <img data-i="12" src="cabinet_of_ministers_of_bihar_minister_13.jpg" alt="Minister 13" />
+          <img data-i="13" src="cabinet_of_ministers_of_bihar_minister_14.jpg" alt="Minister 14" />
+          <img data-i="14" src="cabinet_of_ministers_of_bihar_minister_15.jpg" alt="Minister 15" />
+          <img data-i="15" src="cabinet_of_ministers_of_bihar_minister_16.jpg" alt="Minister 16" />
+          <img data-i="16" src="cabinet_of_ministers_of_bihar_minister_17.jpg" alt="Minister 17" />
+          <img data-i="17" src="cabinet_of_ministers_of_bihar_minister_18.jpg" alt="Minister 18" />
+          <img data-i="18" src="cabinet_of_ministers_of_bihar_minister_19.jpg" alt="Minister 19" />
+          <img data-i="19" src="cabinet_of_ministers_of_bihar_minister_20.jpg" alt="Minister 20" />
+          <img data-i="20" src="cabinet_of_ministers_of_bihar_minister_21.jpg" alt="Minister 21" />
+          <img data-i="21" src="cabinet_of_ministers_of_bihar_minister_22.jpg" alt="Minister 22" />
+          <img data-i="22" src="cabinet_of_ministers_of_bihar_minister_23.jpg" alt="Minister 23" />
+          <img data-i="23" src="cabinet_of_ministers_of_bihar_minister_24.jpg" alt="Minister 24" />
+          <img data-i="24" src="cabinet_of_ministers_of_bihar_minister_25.jpg" alt="Minister 25" />
+          <img data-i="25" src="cabinet_of_ministers_of_bihar_minister_26.jpg" alt="Minister 26" />
+          <img data-i="26" src="cabinet_of_ministers_of_bihar_minister_27.jpg" alt="Minister 27" />
+        </div>
+      </div>
+    </section>
 
-    <div class="split">
-      <div class="line"></div>
-      <div class="line"></div>
-    </div>
+    <h2 style="text-align:center;color:var(--primary-color);margin-top:18px">DISTRICTS OF BIHAR</h2>
 
-<div class="children">
-  <div class="deputy-chief-minister-card"style="max-width:350px; margin:30px auto; display:block;">
-    <img src="deputy_chief_minister_of_bihar_1.jpg" alt="Deputy Chief Minister Of Bihar 1" class="main">
-    <img src="deputy_chief_minister_of_bihar_1_political_party.jpg" alt="Deputy Chief Minister Of Bihar 1 Political Party" class="corner left">
-    <img src="deputy_chief_minister_of_bihar_1_alliance_party.jpg" alt="Deputy Chief Minister Of Bihar 1 Alliance Party" class="corner right">
+    <section class="districts" aria-label="District cards">
+      <!-- A few examples; replace URLs with real targets -->
+      <a class="districts-card" href="#" rel="noopener">
+        <img src="araria.jpg" alt="Araria district" />
+        <div class="info"><p>Araria</p><span>अररिया</span></div>
+      </a>
+      <a class="districts-card" href="#" rel="noopener">
+        <img src="arwal.jpg" alt="Arwal district" />
+        <div class="info"><p>Arwal</p><span>अरवल</span></div>
+      </a>
+      <a class="districts-card" href="#" rel="noopener">
+        <img src="aurangabad.jpg" alt="Aurangabad district" />
+        <div class="info"><p>Aurangabad</p><span>औरंगाबाद</span></div>
+      </a>
+      <!-- ... add remaining district cards ... -->
+    </section>
 
-    <div class="info">
-      <h3>Hon'ble 8th Deputy Chief Minister of Bihar 1</h3>
-      <h3>Samrat Choudhary(Rakesh Kumar)</h3>
-      <h3>सम्राट चौधरी</h3>
-      <h3>Incumbment</h3> <span>(Existence In Office)</span> <span>22 February 2015-Present</span>
-      <h3>Born (Life Span)</h3> <span>16 November 1968-Present (Age 57 years)</span>
-      <h3>Serving 1st Term (1 year)</h3>
-    </div>
-  </div>
+    <footer>
+      <div class="footer-photos">
+        <img src="footer_bihar_emblem.png" alt="Bihar emblem" />
+        <img src="footer_bihar.png" alt="Bihar" />
+      </div>
+      <small>© 2025 Bihar State</small>
+    </footer>
+  </main>
 
-  <div class="deputy-chief-minister-card"style="max-width:350px; margin:30px auto; display:block;">
-    <img src="deputy_chief_minister_of_bihar_2.jpg" alt="Deputy_Chief Minister Of Bihar 2" class="main">
-    <img src="deputy_chief_minister_of_bihar_2_political_party.jpg" alt="Deputy Chief Minister Of Bihar 2 Political Party" class="corner left">
-    <img src="deputy_chief_minister_of_bihar_2_alliance_party.jpg" alt="Deputy Chief Minister Of Bihar 2 Alliance Party" class="corner right">
+  <script>
+    (function(){
+      // Setup the rotating ministers circle: compute count and radius dynamically
+      const circle = document.getElementById('minister-circle');
+      const wrap = document.getElementById('minister-circle-wrap');
+      if(!circle || !wrap) return;
 
-    <div class="info">
-      <h3>Hon'ble 8th Deputy Chief Minister of Bihar 2</h3>
-      <h3>Vijay Kumar Sinha</h3>
-      <h3>विजय कुमार सिन्हा</h3>
-      <h3>Incumbment</h3> <span>(Existence In Office)</span> <span>22 February 2015-Present</span>
-      <h3>Born (Life Span)</h3> <span>
-5 June 1967-Present (Age 58 years)</span>
-      <h3>Serving 1st Term (1 year)</h3>
-    </div>
-  </div>
-</div>
+      // gather images
+      const imgs = Array.from(circle.querySelectorAll('img'));
+      const count = imgs.length || 1;
 
-<div class="cabinet-of-ministers-circle-container">
-  <div class="cabinet-of-ministers-center">
-    <b>BIHAR<br>COUNCIL OF MINISTERS</b>
-  </div>
+      // set CSS var --count
+      circle.style.setProperty('--count', count);
 
-  <div class="cabinet-of-ministers-circle">
-    <img style="--i:1" src="cabinet_of_ministers_of_bihar_minister_1.jpg">
-    <img style="--i:2" src="cabinet_of_ministers_of_bihar_minister_2.jpg">
-    <img style="--i:3" src="cabinet_of_ministers_of_bihar_minister_3.jpg">
-    <img style="--i:4" src="cabinet_of_ministers_of_bihar_minister_4.jpg">
-    <img style="--i:5" src="cabinet_of_ministers_of_bihar_minister_5.jpg">
-    <img style="--i:6" src="cabinet_of_ministers_of_bihar_minister_6.jpg">
-    <img style="--i:7" src="cabinet_of_ministers_of_bihar_minister_7.jpg">
-    <img style="--i:8" src="cabinet_of_ministers_of_bihar_minister_8.jpg">
-    <img style="--i:9" src="cabinet_of_ministers_of_bihar_minister_9.jpg">
-    <img style="--i:10" src="cabinet_of_ministers_of_bihar_minister_10.jpg">
-    <img style="--i:11" src="cabinet_of_ministers_of_bihar_minister_11.jpg">
-    <img style="--i:12" src="cabinet_of_ministers_of_bihar_minister_12.jpg">
-    <img style="--i:13" src="cabinet_of_ministers_of_bihar_minister_13.jpg">
-    <img style="--i:14" src="cabinet_of_ministers_of_bihar_minister_14.jpg">
-    <img style="--i:15" src="cabinet_of_ministers_of_bihar_minister_15.jpg">
-    <img style="--i:16" src="cabinet_of_ministers_of_bihar_minister_16.jpg">
-    <img style="--i:17" src="cabinet_of_ministers_of_bihar_minister_17.jpg">
-    <img style="--i:18" src="cabinet_of_ministers_of_bihar_minister_18.jpg">
-    <img style="--i:19" src="cabinet_of_ministers_of_bihar_minister_19.jpg">
-    <img style="--i:20" src="cabinet_of_ministers_of_bihar_minister_20.jpg">
-    <img style="--i:21" src="cabinet_of_ministers_of_bihar_minister_21.jpg">
-    <img style="--i:22" src="cabinet_of_ministers_of_bihar_minister_22.jpg">
-    <img style="--i:23" src="cabinet_of_ministers_of_bihar_minister_23.jpg">
-    <img style="--i:24" src="cabinet_of_ministers_of_bihar_minister_24.jpg">
-    <img style="--i:25" src="cabinet_of_ministers_of_bihar_minister_25.jpg">
-    <img style="--i:26" src="cabinet_of_ministers_of_bihar_minister_26.jpg">
-    <img style="--i:27" src="cabinet_of_ministers_of_bihar_minister_27.jpg">
-  </div>
-</div>
+      // compute radius: available half of container minus center and some offset
+      function updateRadius(){
+        const rect = wrap.getBoundingClientRect();
+        const minSide = Math.min(rect.width, rect.height);
+        const centerSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--center-size')) || 260;
+        // radius should leave room for minister image size
+        const ministerSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--minister-size')) || 90;
+        const radius = Math.max( (minSide/2) - (centerSize/2) - ministerSize - 8, 40 );
+        circle.style.setProperty('--radius', radius + 'px');
 
-  <h2>DISTRICTS OF BIHAR</h2>
+        // assign index variable for each image (0..count-1)
+        imgs.forEach((img, i) => {
+          img.style.setProperty('--i', i);
+        });
+      }
 
-  <div class="districts">
-    <a href="https://github.com/your-username/araria" target="_blank" class="districts-card">
-      <img src="araria.jpg" alt="Araria">
-      <div class="info"><p>Araria</p><span>अररिया</span></div>
-    </a>
+      // initial update and on resize
+      updateRadius();
+      window.addEventListener('resize', updateRadius);
 
-    <a href="https://github.com/your-username/arwal" target="_blank" class="districts-card">
-      <img src="arwal.jpg" alt="Arwal">
-      <div class="info"><p>Arwal</p><span>अरवल</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/aurangabad" target="_blank" class="districts-card">
-      <img src="aurangabad.jpg" alt="Aurangabad">
-      <div class="info"><p>Aurangabad</p><span>औरंगाबाद</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/banka" target="_blank" class="districts-card">
-      <img src="banka.jpg" alt="Banka">
-      <div class="info"><p>Banka</p><span>बांका</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/begusarai" target="_blank" class="districts-card">
-      <img src="begusarai.jpg" alt="Begusarai">
-      <div class="info"><p>Begusarai</p><span>बेगूसराय</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/bhagalpur" target="_blank" class="districts-card">
-      <img src="bhagalpur.jpg" alt="Bhagalpur">
-      <div class="info"><p>Bhagalpur</p><span>भागलपुर</span></div>
-    </a>
-
-    <a href="https://singhmritunjay7803-svg.github.io/ebhojpur.district.bihar/" target="_blank" class="districts-card">
-      <img src="bhojpur.jpg" alt="Bhojpur">
-      <div class="info"><p>Bhojpur</p><span>भोजपुर</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/buxar" target="_blank" class="districts-card">
-      <img src="buxar.jpg" alt="Buxar">
-      <div class="info"><p>Buxar</p><span>बक्सर</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/darbhanga" target="_blank" class="districts-card">
-      <img src="darbhanga.jpg" alt="Darbhanga">
-      <div class="info"><p>Darbhanga</p><span>दरभंगा</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/east-champaran" target="_blank" class="districts-card">
-      <img src="east_champaran.jpg" alt="East Champaran">
-      <div class="info"><p>East Champaran</p><span>पूर्वी चंपारण</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/gaya" target="_blank" class="districts-card">
-      <img src="gaya.jpg" alt="Gaya">
-      <div class="info"><p>Gaya</p><span>गया</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/gopalganj" target="_blank" class="districts-card">
-      <img src="gopalganj.jpg" alt="Gopalganj">
-      <div class="info"><p>Gopalganj</p><span>गोपालगंज</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/jamui" target="_blank" class="districts-card">
-      <img src="jamui.jpg" alt="Jamui">
-      <div class="info"><p>Jamui</p><span>जमुई</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/jehanabad" target="_blank" class="districts-card">
-      <img src="jehanabad.jpg" alt="Jehanabad">
-      <div class="info"><p>Jehanabad</p><span>जहानाबाद</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/kaimur" target="_blank" class="districts-card">
-      <img src="kaimur_(bhabua).jpg" alt="Kaimur (Bhabua)">
-      <div class="info"><p>Kaimur (Bhabua)</p><span>कैमूर (भभुआ)</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/katihar" target="_blank" class="districts-card">
-      <img src="katihar.jpg" alt="Katihar">
-      <div class="info"><p>Katihar</p><span>कटिहार</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/khagaria" target="_blank" class="districts-card">
-      <img src="khagaria.jpg" alt="Khagaria">
-      <div class="info"><p>Khagaria</p><span>खगड़िया</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/kishanganj" target="_blank" class="districts-card">
-      <img src="kishanganj.jpg" alt="Kishanganj">
-      <div class="info"><p>Kishanganj</p><span>किशनगंज</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/lakhisarai" target="_blank" class="districts-card">
-      <img src="lakhisarai.jpg" alt="Lakhisarai">
-      <div class="info"><p>Lakhisarai</p><span>लखीसराय</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/madhepura" target="_blank" class="districts-card">
-      <img src="madhepura.jpg" alt="Madhepura">
-      <div class="info"><p>Madhepura</p><span>मधेपुरा</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/madhubani" target="_blank" class="districts-card">
-      <img src="madhubani.jpg" alt="Madhubani">
-      <div class="info"><p>Madhubani</p><span>मधुबनी</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/munger" target="_blank" class="districts-card">
-      <img src="munger.jpg" alt="Munger">
-      <div class="info"><p>Munger</p><span>मुंगेर</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/muzaffarpur" target="_blank" class="districts-card">
-      <img src="muzaffarpur.jpg" alt="Muzaffarpur">
-      <div class="info"><p>Muzaffarpur</p><span>मुजफ्फरपुर</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/nalanda" target="_blank" class="districts-card">
-      <img src="nalanda.jpg" alt="Nalanda">
-      <div class="info"><p>Nalanda</p><span>नालंदा</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/nawada" target="_blank" class="districts-card">
-      <img src="nawada.jpg" alt="Nawada">
-      <div class="info"><p>Nawada</p><span>नवादा</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/patna" target="_blank" class="districts-card">
-      <img src="patna.jpg" alt="Patna">
-      <div class="info"><p>Patna</p><span>पटना</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/purnia" target="_blank" class="districts-card">
-      <img src="purnia.jpg" alt="Purnia">
-      <div class="info"><p>Purnia</p><span>पूर्णिया</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/rohtas" target="_blank" class="districts-card">
-      <img src="rohtas.jpg" alt="Rohtas">
-      <div class="info"><p>Rohtas</p><span>रोहतास</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/saharsa" target="_blank" class="districts-card">
-      <img src="saharsa.jpg" alt="Saharsa">
-      <div class="info"><p>Saharsa</p><span>सहरसा</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/samastipur" target="_blank" class="districts-card">
-      <img src="samastipur.jpg" alt="Samastipur">
-      <div class="info"><p>Samastipur</p><span>समस्तीपुर</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/saran" target="_blank" class="districts-card">
-      <img src="saran.jpg" alt="Saran">
-      <div class="info"><p>Saran</p><span>सारण</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/sheikhpura" target="_blank" class="districts-card">
-      <img src="sheikhpura.jpg" alt="Sheikhpura">
-      <div class="info"><p>Sheikhpura</p><span>शेखपुरा</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/sheohar" target="_blank" class="districts-card">
-      <img src="sheohar.jpg" alt="Sheohar">
-      <div class="info"><p>Sheohar</p><span>शिवहर</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/sitamarhi" target="_blank" class="districts-card">
-      <img src="sitamarhi.jpg" alt="Sitamarhi">
-      <div class="info"><p>Sitamarhi</p><span>सीतामढ़ी</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/siwan" target="_blank" class="districts-card">
-      <img src="siwan.jpg" alt="Siwan">
-      <div class="info"><p>Siwan</p><span>सिवान</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/supaul" target="_blank" class="districts-card">
-      <img src="supaul.jpg" alt="Supaul">
-      <div class="info"><p>Supaul</p><span>सुपौल</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/vaishali" target="_blank" class="districts-card">
-      <img src="vaishali.jpg" alt="Vaishali">
-      <div class="info"><p>Vaishali</p><span>वैशाली</span></div>
-    </a>
-
-    <a href="https://github.com/your-username/west-champaran" target="_blank" class="districts-card">
-      <img src="west_champaran.jpg" alt="West Champaran">
-      <div class="info"><p>West Champaran</p><span>पश्चिमी चंपारण</span></div>
-    </a>
-   </div>
-
-       <footer>
-  <div class="footer-links">
-    <a href="#">Terms</a>
-    <a href="#">Privacy</a>
-    <a href="#">Security</a>
-    <a href="#">Status</a>
-    <a href="#">Community</a>
-    <a href="#">Contact</a>
-    <a href="#">Manage Cookies</a>
-  </div>
-
-  <div class="footer-bottom">
-    <div class="footer-photos">
-    <img src="footer_bihar_emblem.png" alt="Footer Bihar Emblem">
-    <img src="footer_bihar.png" alt="Footer Bihar">
-    <small>© 2025 Bihar State</small>
-  </div>
- </div>
-</footer>
-  
+      // accessibility: allow keyboard focus and hover-like scale on focus
+      imgs.forEach(img => {
+        img.setAttribute('tabindex', '0');
+        img.addEventListener('focus', ()=> img.classList.add('focused'));
+        img.addEventListener('blur', ()=> img.classList.remove('focused'));
+        img.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); img.click(); }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
