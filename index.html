@@ -211,7 +211,8 @@ ministers.forEach(minister => {
 
         const [nameEn, nameHi] = name.split(" / ").map(s => s.trim());
         const [minEn, minHi] = (ministry ? ministry.split(" / ") : ["", ""]).map(s => s.trim());
-
+        const name = minister.dataset.name || "Unknown Minister";
+const ministry = minister.dataset.ministry || "Unknown Ministry";
         centerBox.innerHTML = `
           <div style='font-size:16px; font-weight:bold;'>${nameEn}</div>
           <div style='font-size:14px; color:#555;'>${nameHi || ''}</div>
