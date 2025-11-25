@@ -71,7 +71,7 @@
 
     @keyframes rotateCircle{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
-    .districts{display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr);gap:20px;padding: 20px;max-width: 1100px;margin: auto}
+    .districts{display:grid;grid-template-columns:repeat(3, 1fr);gap:20px;padding: 20px;}
 
     .districts-card{background:#white;border-radius:10px;overflow:hidden;display:block;text-decoration:none;color:inherit;box-shadow:0 4px 6px rgba(0,0,0,0.1);transition:transform 0.2s}
 
@@ -84,6 +84,18 @@
     . districts-card .info span{font-size: 16px;color: #555}
 
     .districts-card:hover{transform:translateY(-5px)}
+
+@media (max-width: 900px) {
+  .districts {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row on tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .districts {
+    grid-template-columns: repeat(1, 1fr); /* 1 per row on phones */
+  }
+}
 
     footer{background:#fff;padding:18px 12px;border-top:1px solid #eee;margin-top:28px;text-align:center}
     .footer-photos{display:flex;justify-content:center;gap:8px;align-items:center}
