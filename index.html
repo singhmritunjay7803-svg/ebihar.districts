@@ -71,10 +71,50 @@
   z-index: 999;
 }
 
-@keyframes rotateCircle {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@@media (max-width: 768px) {
+  .minister-circle-container {
+    width: 420px;
+    height: 420px;
+  }
+
+  .minister-center {
+    width: 150px;
+    height: 150px;
+    font-size: 16px;
+  }
+
+  .minister-circle img {
+    width: 60px;
+    height: 60px;
+    transform-origin: 180px;
+    transform: rotate(calc(360deg / 22 * var(--i)))
+               translate(180px)
+               rotate(calc(-(360deg / 22) * var(--i)));
+  }
 }
+
+@media (max-width: 480px) {
+  .minister-circle-container {
+    width: 340px;
+    height: 340px;
+  }
+
+  .minister-center {
+    width: 130px;
+    height: 130px;
+    font-size: 14px;
+  }
+
+  .minister-circle img {
+    width: 50px;
+    height: 50px;
+    transform-origin: 150px;
+    transform: rotate(calc(360deg / 22 * var(--i)))
+               translate(150px)
+               rotate(calc(-(360deg / 22) * var(--i)));
+  }
+}
+
     .top-banner {
       background-color: rgba(75, 0, 130, 0.8);
       display: flex;
