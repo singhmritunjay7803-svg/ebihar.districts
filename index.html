@@ -109,6 +109,46 @@
   z-index: 40;
 }
 
+#center-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.side-card {
+    width: 28%;
+    height: 70%;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.side-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.center-text {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: bold;
+}
+
 .cabinet-or-council-of-ministers-of-bihar-circle {
   width: 100%;
   height: 100%;
@@ -353,29 +393,36 @@ data-name=""
     </section>
 
 <script>
-const centerBox = document.querySelector(".cabinet-or-council-of-ministers-of-bihar-center");
+const centerBox = document.getElementById("center-content");
 const ministers = document.querySelectorAll("#minister-circle img");
+const circle = document.getElementById("minister-circle");
 
-ministers.forEach(minister => {
-  minister.addEventListener("click", () => {
-    const ministerName = minister.dataset.name || "Unknown Minister";
-    const ministerMinistry = minister.dataset.ministry || "Unknown Ministry";
+ministers.forEach(min => {
+    min.addEventListener("click", () => {
 
-    const [nameEn, nameHi] = ministerName.split(" / ").map(s => s.trim());
-    const [minEn, minHi] = ministerMinistry.split(" / ").map(s => s.trim());
+        // stop rotation
+        circle.classList.add("stop-rotation");
 
-    centerBox.innerHTML = `
-      <div style='font-size:16px; font-weight:bold;'>${nameEn}</div>
-      <div style='font-size:14px; color:#555;'>${nameHi || ''}</div>
-      <div style='margin-top:8px; font-size:14px; font-weight:bold;'>${minEn}</div>
-      <div style='font-size:13px; color:#555;'>${minHi || ''}</div>
-    `;
+        const photo1 = min.dataset.photo1;
+        const photo2 = min.dataset.photo2;
+        const name = min.dataset.name;
+        const ministry = min.dataset.ministry;
 
-document.getElementById("minister-circle").classList.add("stop-rotation");
+        centerBox.innerHTML = `
+            <div class="side-card">
+                <img src="${photo1}">
+            </div>
 
-    centerBox.style.background = "#fff3d4";
-    setTimeout(() => centerBox.style.background = "white", 300);
-  });
+            <div class="center-text">
+                <div>${name}</div>
+                <div style="font-size:12px; color:#555;">${ministry}</div>
+            </div>
+
+            <div class="side-card">
+                <img src="${photo2}">
+            </div>
+        `;
+    });
 });
 </script>
 
