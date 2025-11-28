@@ -395,11 +395,19 @@ data-name=""
     </section>
 
 <script>
-document.getElementById("modified").innerText =
-    new Date(document.lastModified).toLocaleDateString();
 
+// select all minister images
+const ministers = document.querySelectorAll(
+  ".cabinet-or-council-of-ministers-of-bihar-circle img"
+);
+
+// center box where content will appear
+const centerBox = document.getElementById("center-content");
+
+// rotating circle
 const circle = document.getElementById("minister-circle");
 
+// add click event to each minister
 ministers.forEach(min => {
     min.addEventListener("click", () => {
 
