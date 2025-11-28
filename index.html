@@ -414,10 +414,10 @@ ministers.forEach(min => {
         // stop rotation
         circle.classList.add("stop-rotation");
 
-        const photo1 = min.dataset.photo1;
-        const photo2 = min.dataset.photo2;
-        const name = min.dataset.name;
-        const ministry = min.dataset.ministry;
+                const photo1 = min.dataset.photo1 || "default_party.jpg";
+        const photo2 = min.dataset.photo2 || "default_alliance.jpg";
+        const name = min.dataset.name || "Information Not Available";
+        const ministry = min.dataset.ministry || "Ministry details not available";
 
         centerBox.innerHTML = `
             <div class="side-card">
