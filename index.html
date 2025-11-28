@@ -395,8 +395,16 @@ data-name=""
     </section>
 
 <script>
+  const today = new Date();
+  const formatted =
+    today.getDate().toString().padStart(2, '0') + '/' +
+    (today.getMonth()+1).toString().padStart(2, '0') + '/' +
+    today.getFullYear();
+
+  document.getElementById("lastUpdated").textContent = formatted;
 const centerBox = document.getElementById("center-content");
 const ministers = document.querySelectorAll("#minister-circle img");
+
 const circle = document.getElementById("minister-circle");
 
 ministers.forEach(min => {
@@ -628,6 +636,7 @@ ministers.forEach(min => {
         <img src="footer_bihar_emblem.png" alt="Footer Bihar Emblem" />
         <img src="footer_bihar.png" alt="Footer Bihar" />
       </div>
+      <p>Last Updated On: <span id="lastUpdated"></span></p>
       <small>© 2025 Bihar State</small>
     </footer>
   </main>
